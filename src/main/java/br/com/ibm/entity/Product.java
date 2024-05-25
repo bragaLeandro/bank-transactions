@@ -21,7 +21,7 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    private String nome;
+    private String name;
 
     @CreationTimestamp
     private LocalDateTime creationDate;
@@ -29,5 +29,5 @@ public class Product {
     @UpdateTimestamp
     private LocalDateTime updateDate;
 
-    private boolean isEnabled;
+    private boolean enable;
 }
