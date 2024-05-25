@@ -1,10 +1,11 @@
 package br.com.ibm.service;
 
 
+import br.com.ibm.dto.ProductDto;
 import br.com.ibm.entity.Product;
 import br.com.ibm.repository.ProductRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -13,23 +14,27 @@ import java.util.UUID;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final ModelMapper modelMapper;
 
-    ProductService (ProductRepository productRepository) {
+    ProductService (ProductRepository productRepository,
+                    ModelMapper modelMapper) {
         this.productRepository = productRepository;
+        this.modelMapper = modelMapper;
     }
 
-    public void createProduct(Product product) {
-        productRepository.save(product);
+    public void createProduct(ProductDto productDto) {
+       Product product = modelMapper.map(productDto, Product.class);
+       productRepository.save(product);
     }
 
     public void inactivateProduct(UUID uuid) {
         Product product = this.findById(uuid);
 
-        if (!product.isEnabled()) {
+        if (!product.isEnable()) {
             throw new IllegalArgumentException("Product is already disabled");
         }
 
-        product.setEnabled(false);
+        product.setEnable(false);
 
         productRepository.save(product);
     }
@@ -37,11 +42,11 @@ public class ProductService {
     public void activateProduct(UUID uuid) {
         Product product = this.findById(uuid);
 
-        if (product.isEnabled()) {
+        if (product.isEnable()) {
             throw new IllegalArgumentException("Product is already enabled");
         }
 
-        product.setEnabled(true);
+        product.setEnable(true);
 
         productRepository.save(product);
     }
