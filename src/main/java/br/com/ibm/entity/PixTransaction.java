@@ -45,4 +45,12 @@ public class PixTransaction {
         this.status = status;
         this.value = value;
     }
+
+    public PixTransaction(User debitor, User creditor, String status, String description, BigDecimal value) {
+        this.debitor = debitor;
+        this.creditor = creditor;
+        this.status = status;
+        this.description = description;
+        this.value = value;
+    }
 }
