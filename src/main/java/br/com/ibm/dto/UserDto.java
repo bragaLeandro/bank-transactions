@@ -1,2 +1,4 @@
-package br.com.ibm.dto;public class UserDto {
+package br.com.ibm.dto;
+
+public class UserDto {
 }
