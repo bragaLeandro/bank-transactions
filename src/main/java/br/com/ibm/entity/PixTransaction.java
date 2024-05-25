@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -30,7 +31,7 @@ public class PixTransaction {
     @JoinColumn(name = "pix_key_id")
     private PixKey pixKey;
 
-    private double value;
+    private BigDecimal value;
 
     @CreationTimestamp
     private LocalDateTime transactionDate;
@@ -38,7 +39,7 @@ public class PixTransaction {
 
     private String description;
 
-    public PixTransaction(User debitor, User creditor, String status, double value) {
+    public PixTransaction(User debitor, User creditor, String status, BigDecimal value) {
         this.debitor = debitor;
         this.creditor = creditor;
         this.status = status;

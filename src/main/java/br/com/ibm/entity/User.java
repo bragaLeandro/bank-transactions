@@ -11,6 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
@@ -41,8 +42,18 @@ public class User implements UserDetails {
     private Calendar dateOfBirth;
 
     @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    private Calendar creationDate;
+    private LocalDateTime creationDate;
+
+    private Boolean enable;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Balance balance;
+
+    @ManyToMany
+    @JoinTable(name = "tab_user_products",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id"))
+    private List<Product> products;
 
     @Column(name = "role")
     private String role;
@@ -87,8 +98,27 @@ public class User implements UserDetails {
     public void setRole(String role) {
         this.role = role;
     }
-    public Calendar getCreationDate() {
+    public LocalDateTime getCreationDate() {
         return creationDate;
+    }
+
+    public Balance getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Balance balance) {
+        this.balance = balance;
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
+    public void setEnable(boolean enable) {
+        this.enable = enable;
     }
 
     //Spring security methods
@@ -123,6 +153,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return this.enable;
     }
 }
