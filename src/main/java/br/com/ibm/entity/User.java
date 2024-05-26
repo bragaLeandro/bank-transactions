@@ -38,8 +38,11 @@ public class User implements UserDetails {
     @Column(name = "ds_password", length = 455)
     private String password;
 
+    @Column(name = "ds_account")
+    private String accountNumber;
+
     @Temporal(TemporalType.DATE)
-    private Calendar dateOfBirth;
+    private Calendar birthDate;
 
     @CreationTimestamp
     private LocalDateTime creationDate;
@@ -57,7 +60,6 @@ public class User implements UserDetails {
 
     @Column(name = "role")
     private String role;
-
 
     public Long getId() {
         return id;
@@ -83,12 +85,12 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public Calendar getDateOfBirth() {
-        return dateOfBirth;
+    public Calendar getBirthDate() {
+        return birthDate;
     }
 
-    public void setDateOfBirth(Calendar dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
+    public void setgetBirthDate(Calendar dateOfBirth) {
+        this.birthDate = birthDate;
     }
 
     public String getRole() {
@@ -153,6 +155,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return this.enable;
+        return enable;
     }
 }

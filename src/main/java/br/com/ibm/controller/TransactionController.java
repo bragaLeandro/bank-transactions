@@ -34,8 +34,8 @@ public class TransactionController {
     }
 
     @GetMapping("/history")
-    public ResponseEntity<List<TransactionPixTransactionDto>> getHistoryTransactions(@RequestParam("id") Long userId) {
-        List<TransactionPixTransactionDto> transactions = this.pixTransactionService.getHistoryTransactions(userId);
+    public ResponseEntity<List<TransactionPixTransactionDto>> getHistoryTransactions() {
+        List<TransactionPixTransactionDto> transactions = this.pixTransactionService.getHistoryTransactions();
         return ResponseEntity.ok(transactions);
     }
 }

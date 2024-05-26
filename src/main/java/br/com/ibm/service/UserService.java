@@ -6,22 +6,30 @@ import br.com.ibm.entity.Product;
 import br.com.ibm.entity.User;
 import br.com.ibm.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
 @Service
+@Slf4j
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
     private final BalanceService balanceService;
 
     private final ModelMapper modelMapper;
 
-    public UserService(UserRepository userRepository, BalanceService balanceService, ModelMapper modelMapper) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder,
+                       BalanceService balanceService, ModelMapper modelMapper) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
         this.balanceService = balanceService;
         this.modelMapper = modelMapper;
     }
@@ -30,6 +38,9 @@ public class UserService {
     public void createUser(UserDto userDto) {
 
         User user = modelMapper.map(userDto, User.class);
+        user.setEnable(true);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRole("USER");
 
         Balance initialBalance = balanceService.setInicialBalance(user);
         user.setBalance(initialBalance);

@@ -12,6 +12,7 @@ import br.com.ibm.repository.PixKeyRepository;
 import br.com.ibm.repository.PixTransactionRepository;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -95,10 +96,11 @@ public class PixTransactionService {
         pixTransactionRepository.save(transacaoPix);
     }
 
-    public List<TransactionPixTransactionDto> getHistoryTransactions(Long userid) {
-        List<PixTransactionDto> transactions = new ArrayList<>();
+    public List<TransactionPixTransactionDto> getHistoryTransactions() {
 
-        User user = userService.findById(userid);
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        List<PixTransactionDto> transactions = new ArrayList<>();
 
         List<PixTransaction> creditor = pixTransactionRepository.findPixTransactionByCreditor(user);
         List<PixTransaction> debitor = pixTransactionRepository.findPixTransactionByDebitor(user);

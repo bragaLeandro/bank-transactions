@@ -1,10 +1,15 @@
 package br.com.ibm.dto;
 
+import lombok.Data;
+import org.springframework.boot.convert.DataSizeUnit;
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public class TransactionPixTransactionDto {
+    @Data
+    public class TransactionPixTransactionDto {
 
-    private double transferValue;
-    private String status;
-    private LocalDateTime transferDate;
-}
+        private BigDecimal transferValue;
+        private String status;
+        private LocalDateTime transferDate;
+    }
