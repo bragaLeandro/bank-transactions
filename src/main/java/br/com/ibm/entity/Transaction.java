@@ -1,7 +1,9 @@
 package br.com.ibm.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
@@ -12,8 +14,8 @@ import java.util.UUID;
 @Setter
 @RequiredArgsConstructor
 @Entity
-@Table(name = "TAB_PIX_TRANSACTION")
-public class PixTransaction {
+@Table(name = "TAB_TRANSACTION")
+public class Transaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,30 +29,38 @@ public class PixTransaction {
     @JoinColumn(name = "creditor_user_id")
     private User creditor;
 
-    @ManyToOne
-    @JoinColumn(name = "pix_key_id")
-    private PixKey pixKey;
+    private String accountNumber;
 
-    private BigDecimal value;
+    private BigDecimal amount;
 
     @CreationTimestamp
     private LocalDateTime transactionDate;
     private String status;
 
+    private String type;
+
     private String description;
 
-    public PixTransaction(User debitor, User creditor, String status, BigDecimal value) {
+    public Transaction(User debitor, User creditor, String type, String status, BigDecimal amount) {
         this.debitor = debitor;
         this.creditor = creditor;
+        this.type = type;
         this.status = status;
-        this.value = value;
+        this.amount = amount;
     }
 
-    public PixTransaction(User debitor, User creditor, String status, String description, BigDecimal value) {
-        this.debitor = debitor;
+    public Transaction(User creditor, String status, BigDecimal amount) {
         this.creditor = creditor;
         this.status = status;
+        this.amount = amount;
+    }
+
+    public Transaction(User debitor, User creditor, String type, String status, String description, BigDecimal amount) {
+        this.debitor = debitor;
+        this.creditor = creditor;
+        this.type = type;
+        this.status = status;
         this.description = description;
-        this.value = value;
+        this.amount = amount;
     }
 }

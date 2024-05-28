@@ -3,6 +3,7 @@ package br.com.ibm.controller;
 import br.com.ibm.dto.BalanceDto;
 import br.com.ibm.dto.LoginDto;
 import br.com.ibm.dto.UserDto;
+import br.com.ibm.dto.UserResponseDto;
 import br.com.ibm.entity.Balance;
 import br.com.ibm.entity.User;
 import br.com.ibm.service.BalanceService;
@@ -78,6 +79,11 @@ public class UserController {
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         }
+    }
+
+    @GetMapping("/account")
+    public ResponseEntity<UserResponseDto> getUserAccount() {
+        return ResponseEntity.ok(userService.getAccountNumber());
     }
 
     @PutMapping("/activate")

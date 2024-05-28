@@ -7,17 +7,19 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.validator.constraints.br.CPF;
+import org.springframework.cglib.core.Local;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "TAB_USER")
@@ -41,22 +43,18 @@ public class User implements UserDetails {
     @Column(name = "ds_account")
     private String accountNumber;
 
-    @Temporal(TemporalType.DATE)
-    private Calendar birthDate;
+    private LocalDate birthDate;
 
     @CreationTimestamp
     private LocalDateTime creationDate;
 
     private Boolean enable;
 
+    @Transient
+    private Integer age;
+
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Balance balance;
-
-    @ManyToMany
-    @JoinTable(name = "tab_user_products",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id"))
-    private List<Product> products;
 
     @Column(name = "role")
     private String role;
@@ -85,11 +83,19 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public Calendar getBirthDate() {
+    public LocalDate getBirthDate() {
         return birthDate;
     }
 
-    public void setgetBirthDate(Calendar dateOfBirth) {
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
+    }
+
+    public void setBirthDate(LocalDate dateOfBirth) {
         this.birthDate = birthDate;
     }
 
@@ -112,15 +118,16 @@ public class User implements UserDetails {
         this.balance = balance;
     }
 
-    public List<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<Product> products) {
-        this.products = products;
-    }
     public void setEnable(boolean enable) {
         this.enable = enable;
+    }
+
+    public Integer getAge() {
+        return Period.between(birthDate, LocalDate.now()).getYears();
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
     }
 
     //Spring security methods
